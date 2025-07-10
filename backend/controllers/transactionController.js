@@ -278,29 +278,29 @@ export const transferMoneyToAccount = async (req, res) => {
     // updating transaction fromAccount as expense
     const description = `Transfer (${fromAccount.account_name} to ${toAccount.account_name})`;
 
-await pool.query({
-  text: `INSERT INTO tbltransaction(user_id, description, status, source, amount, type) VALUES($1,$2,$3,$4,$5,$6)`,
-  values: [
-    userId,
-    description,
-    "Completed",
-    fromAccount.account_name,
-    newAmount,
-    "Expense",
-  ],
-});
+    await pool.query({
+      text: `INSERT INTO tbltransaction(user_id, description, status, source, amount, type) VALUES($1,$2,$3,$4,$5,$6)`,
+      values: [
+        userId,
+        description,
+        "Completed",
+        fromAccount.account_name,
+        newAmount,
+        "Expense",
+      ],
+    });
 
-await pool.query({
-  text: `INSERT INTO tbltransaction(user_id, description, status, source, amount, type) VALUES($1,$2,$3,$4,$5,$6)`,
-  values: [
-    userId,
-    description,
-    "Completed",
-    toAccount.account_name,
-    newAmount,
-    "Income",
-  ],
-});
+    await pool.query({
+      text: `INSERT INTO tbltransaction(user_id, description, status, source, amount, type) VALUES($1,$2,$3,$4,$5,$6)`,
+      values: [
+        userId,
+        description,
+        "Completed",
+        toAccount.account_name,
+        newAmount,
+        "Income",
+      ],
+    });
 
     // commit transaction
     await pool.query("COMMIT");
