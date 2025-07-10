@@ -50,11 +50,11 @@ const HomePage = () => {
             },
             {
               title: "Export Data",
-              desc: "Download your transaction history in CSV or PDF.",
+              desc: "Download your transaction history in Excel format.",
             },
             {
-              title: "Simple Interface",
-              desc: "Minimal and intuitive design for seamless tracking.",
+              title: "AI-Powered Financial Feedback",
+              desc: "Get personalized suggestions and actionable steps to improve spending and saving habits using Google's Gemini AI.",
             },
           ].map((f, i) => (
             <div

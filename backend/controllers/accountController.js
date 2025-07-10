@@ -79,7 +79,7 @@ export const createAccount = async (req, res) => {
       values: [
         userId,
         description,
-        "Completetd",
+        "Completed",
         account.account_name,
         amount,
         "Income",

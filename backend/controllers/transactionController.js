@@ -254,40 +254,63 @@ export const transferMoneyToAccount = async (req, res) => {
       values: [newAmount, fromAccount.id],
     });
     // add in toAccount
-    const toAccount = await pool.query({
-      text: `UPDATE tblaccount SET account_balance = account_balance + $1, updatedat = CURRENT_TIMESTAMP WHERE id = $2 RETURNING *`,
-      values: [newAmount, to_account.id],
+    const toAccountResult = await pool.query({
+      text: `SELECT * FROM tblaccount WHERE id = $1`,
+      values: [to_account],
+    });
+
+    const toAccount = toAccountResult.rows[0];
+
+    if (!toAccount) {
+      await pool.query("ROLLBACK"); // Rollback if toAccount not found
+      return res.status(400).json({
+        status: "Failed",
+        message: "Destination account not found.",
+      });
+    }
+
+    // Now do the update
+    await pool.query({
+      text: `UPDATE tblaccount SET account_balance = account_balance + $1, updatedat = CURRENT_TIMESTAMP WHERE id = $2`,
+      values: [newAmount, to_account],
     });
 
     // updating transaction fromAccount as expense
-    const description = `Transfer (${fromAccount.account_name} to ${toAccount.rows[0].account_name})`;
-    await pool.query({
-      text: `INSERT INTO tbltransaction(user_id, description, status, source, amount, type) VALUES($1,$2,$3,$4,$5,$6)`,
-      values: [
-        userId,
-        description,
-        "Completed",
-        fromAccount.account_name,
-        amount,
-        "Expense",
-      ],
-    });
-    // updating transaction toAccount as income
-    await pool.query({
-      text: `INSERT INTO tbltransaction(user_id, description, status, source, amount, type) VALUES($1,$2,$3,$4,$5,$6)`,
-      values: [
-        userId,
-        description,
-        "Completed",
-        toAccount.rows[0].account_name,
-        amount,
-        "Income",
-      ],
-    });
+    const description = `Transfer (${fromAccount.account_name} to ${toAccount.account_name})`;
+
+await pool.query({
+  text: `INSERT INTO tbltransaction(user_id, description, status, source, amount, type) VALUES($1,$2,$3,$4,$5,$6)`,
+  values: [
+    userId,
+    description,
+    "Completed",
+    fromAccount.account_name,
+    newAmount,
+    "Expense",
+  ],
+});
+
+await pool.query({
+  text: `INSERT INTO tbltransaction(user_id, description, status, source, amount, type) VALUES($1,$2,$3,$4,$5,$6)`,
+  values: [
+    userId,
+    description,
+    "Completed",
+    toAccount.account_name,
+    newAmount,
+    "Income",
+  ],
+});
+
     // commit transaction
     await pool.query("COMMIT");
+    res.status(200).json({
+      status: "Success",
+      message: "Transfer completed successfully.",
+    });
   } catch (error) {
-    console.log(error);
+    console.error("Error in transferMoneyToAccount:", error);
+    await pool.query("ROLLBACK"); // Ensure rollback on any error
     res.status(500).json({
       status: "Failed",
       message: error.message,
