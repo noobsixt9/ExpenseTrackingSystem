@@ -207,7 +207,7 @@ const TransferMoney = ({ isOpen, setIsOpen, refetch }) => {
                   <Button
                     disabled={loading}
                     type="submit"
-                    className="bg-violet-700 text-white w-full"
+                    className="bg-violet-700 text-white w-full cursor-pointer"
                   >
                     {`Transfer ${
                       watch("amount") ? formatCurrency(watch("amount")) : ""
