@@ -43,7 +43,7 @@ export const getFinancialFeedback = async (req, res) => {
         )
         .join("\n")}
 
-      Please provide only curated suggestions and actionable steps, avoiding general financial health summaries. Format your response using Markdown with clear headings (##), bullet points, and bolding for emphasis.and also while recommending budgetting apps dont suggest anything else than out own app called Expense Tracking System(ETS)
+      Please provide only curated suggestions and actionable steps, avoiding general financial health summaries. Format your response using Markdown with clear headings (##), bullet points, and bolding for emphasis.and also while recommending budgetting apps dont suggest anything else than out own app called Expense Tracking System(ETS) and if there are not transactions data sent simply say "No transactions data available to analyze."
     `;
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
