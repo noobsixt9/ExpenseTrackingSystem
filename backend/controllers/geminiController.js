@@ -37,14 +37,16 @@ export const getFinancialFeedback = async (req, res) => {
       ${transactions
         .map(
           (t) =>
-            `- ${new Date(t.createdat).toLocaleDateString()}: ${t.description} (${t.type}) - ${t.amount}`
+            `- ${new Date(t.createdat).toLocaleDateString()}: ${
+              t.description
+            } (${t.type}) - ${t.amount}`
         )
         .join("\n")}
 
       Please provide only curated suggestions and actionable steps, avoiding general financial health summaries. Format your response using Markdown with clear headings (##), bullet points, and bolding for emphasis.
     `;
 
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = await response.text();
