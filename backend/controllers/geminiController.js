@@ -26,8 +26,7 @@ export const getFinancialFeedback = async (req, res) => {
 
     // Prepare the data for the prompt
     const prompt = `
-      You are a financial advisor. Based on the following user's financial data, provide curated suggestions and specific, actionable steps to improve their spending and saving habits. Focus on identifying key areas for improvement.
-
+      You are a financial advisor. Based on the following user's financial data, provide curated suggestions and specific, actionable steps to improve their spending and saving habits. Focus on identifying key areas for improvement and if there are not data (account data and transaction data) sent simply say "No transactions data available to analyze."
       **User's Accounts:**
       ${accounts
         .map((acc) => `- ${acc.account_name}: ${acc.account_balance}`)
@@ -43,7 +42,7 @@ export const getFinancialFeedback = async (req, res) => {
         )
         .join("\n")}
 
-      Please provide only curated suggestions and actionable steps, avoiding general financial health summaries. Format your response using Markdown with clear headings (##), bullet points, and bolding for emphasis.and also while recommending budgetting apps dont suggest anything else than out own app called Expense Tracking System(ETS) and if there are not transactions data sent simply say "No transactions data available to analyze."
+      Please provide only curated suggestions and actionable steps, avoiding general financial health summaries. Format your response using Markdown with clear headings (##), bullet points, and bolding for emphasis.and also while recommending budgetting apps dont suggest anything else than out own app called Expense Tracking System(ETS)."
     `;
 
     const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
