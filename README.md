@@ -54,8 +54,8 @@ To get the project up and running on your local machine, follow these steps:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/github-FinalProject.git
-cd github-FinalProject
+git clone https://github.com/noobsixt9/ExpenseTrackingSystem.git
+cd ExpenseTrackingSystem
 ```
 
 ### 2. Backend Setup
